@@ -1,29 +1,33 @@
 function addToParty(id) {
-  if (party.some((el) => el.id === id)) {
-    Toastify({
-      text: "El personaje ya está en la party",
-      duration: 3000,
-    }).showToast();
-  } else {
-    if (party.length == 5) {
-      Toastify({
-        text: "Has alcanzado el máximo de jugadores permitidos.",
-        duration: 3000,
-      }).showToast();
-    } else {
-      let charToAdd = characters.find((el) => el.id === id);
-      party.push({
-        ...charToAdd,
-      });
-      Toastify({
-        text: "Personaje agregado correctamente.",
-        duration: 3000,
-      }).showToast();
-    }
-  }
+  fetch("../js/json/characters.json")
+    .then((resp) => resp.json())
+    .then((data) => {
+      if (party.some((el) => el.id === id)) {
+        Toastify({
+          text: "El personaje ya está en la party",
+          duration: 3000,
+        }).showToast();
+      } else {
+        if (party.length == 5) {
+          Toastify({
+            text: "Has alcanzado el máximo de jugadores permitidos.",
+            duration: 3000,
+          }).showToast();
+        } else {
+          let charToAdd = data.find((el) => el.id === id);
+          party.push({
+            ...charToAdd,
+          });
+          Toastify({
+            text: "Personaje agregado correctamente.",
+            duration: 3000,
+          }).showToast();
+        }
+      }
 
-  localStorage.setItem("party", JSON.stringify(party));
-  showParty();
+      localStorage.setItem("party", JSON.stringify(party));
+      showParty();
+    });
 }
 
 function showParty() {
